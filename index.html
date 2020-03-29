@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sastia Dwi Putri Darmawan</title>
+</head>
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Comic+Neue&display=swap');
+  
+  body {
+    font-family: 'Comic Neue', cursive;
+    min-height: 100vh;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    transition: all 1500ms ease-in-out;
+    background: #e3f2fd;
+  }
+
+  #app {
+    height: 90vh;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+  }
+
+  footer {
+    width: 100%;
+    height: 10vh;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+  }
+
+  footer div a {
+    position: relative;
+    text-decoration: none;
+  }
+
+  footer div a:hover::before {
+    /* background: linear-gradient(#ead6ee, #a0f1ea); */
+    opacity: .8;
+    top: -2px;
+    bottom: -2px;
+  }
+
+  .a-Morning::before, .a-Afternoon::before, .a-Night::before {
+    content: " ";
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    right: 0;
+    top: calc(100% - 8px);
+    transition: all 120ms ease-in-out;
+    z-index: -1;
+  }
+
+  .a-Morning:hover::before, .a-Afternoon:hover::before, .a-Night:hover::before{
+    opacity: .8;
+    top: -2px;
+    bottom: -2px;
+  }
+
+  .a-Morning::before {
+    background: #f4ff82;
+  }
+
+  .a-Afternoon::before {
+    background: #fde3f8;
+  }
+
+  .a-Night::before {
+    background: #fde3f8;
+  }
+</style>
+
+<body>
+
+  <div id="app">
+    <h1>
+	  <p><iframe src="http://free.timeanddate.com/clock/i77uw292/n108/fn7/fs20/tct/pct/ftb/th1" frameborder="0" width="93" height="30" allowTransparency="true"></iframe></p>
+      <p><span id="typed"></span></p>
+    </h1>
+	
+  </div>
+  <footer>
+    <div>
+      created with <span style="color: red;">&hearts;</span> by <a class="link" href="https://www.instagram.com/iqblw/" target="_blank" rel="nofollow">Iqbal Wahid</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
+
+  <script>
+    let name = localStorage.name || ''
+    if (window.location.search.substr(1) != '') {
+      name = window.location.search.substr(1)
+      localStorage.name = window.location.search.substr(1)
+    }
+    let theme = {
+      Morning: {
+        body: '##f4ff82',
+        text: '#000'
+      },
+      Afternoon: {
+        body: '#fde3f8',
+        text: '##000'
+      },
+      Night: {
+        body: '#494a41',
+        text: '#fff'
+      },
+    }
+    let now = ''
+    const typed = new Typed('#typed', {
+      strings: [''],
+      typeSpeed: 140,
+      showCursor: false
+    })
+
+    function changeTheme() {
+	
+      const word = 'Good ' + now.slice(0, 1).toUpperCase() + now.slice(1) + ', Sastia. ' + name
+      tmpNow = now == 'Afternoon' ? 'Morning' : now
+      removeClassLink()
+      document.querySelectorAll('.link').forEach(el => {
+        el.classList.add('a-' + (tmpNow == 'Afternoon' ? 'Morning' : tmpNow))
+      })
+      document.body.style.background = theme[tmpNow].body
+      document.querySelector('#app').style.color = theme[tmpNow].text
+      document.querySelector('footer').style.color = theme[tmpNow].text
+      document.querySelectorAll('.link').forEach(el => {
+        el.style.color = theme[tmpNow].text
+      })
+      typed.strings = [word]
+      document.title = word
+      typed.reset(1)
+    }
+
+    function tmpChangeTheme() {
+      now = now == 'Morning' || now == 'Afternoon' ? 'Afternoon' :
+             now == 'Afternoon' ? 'Night' :
+             now == 'Night' ? 'Morning' : ''
+      changeTheme()
+    }
+
+    function removeClassLink() {
+      document.querySelectorAll('.link').forEach(el => {
+        const _ = el.classList
+        _.remove('a-Morning')
+        _.remove('a-Afternoon')
+        _.remove('a-Night')
+      })
+    }
+
+    setInterval(() => {
+      const d = new Date()
+      const jam = d.getHours()
+      const oldNow = now
+      if (jam >= 6 && jam < 12) {
+        now = 'Morning'
+      }
+      else if (jam >= 12 && jam < 15) {
+        now = 'Afternoon'
+      }
+      else if (jam >= 15 && jam < 19) {
+        now = 'Afternoon'
+      }
+      else if ((jam >= 19 && jam <= 24) || jam < 6) {
+        now = 'Night'
+      }
+
+      oldNow != now ? changeTheme() : ''
+    }, 150)
+	
+  </script>
+</body>
+</html>
